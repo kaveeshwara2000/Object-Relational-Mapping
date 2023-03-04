@@ -8,9 +8,36 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 public class SessionFactoryConfiguration {
     private static SessionFactoryConfiguration factoryConfiguration;
+    private SessionFactory sessionFactory;
+
+    private SessionFactoryConfiguration() {
+        // creating the service registry
+//        sessionFactory = new StandardServiceRegistryBuilder()
+//                .configure()
+//                .build();
+//
+//        //creating metadata object
+//        Metadata metadata = new MetadataSources(serviceRegistry)
+//                .addAnnotatedClass(Customer.class)
+//                .getMetadataBuilder()
+//                .applyImplicitNamingStrategy(ImplicitNamingStrategyJpaCompliantImpl.INSTANCE)
+//                .build();
+//
+//        //creating the session factory
+//        SessionFactory sessionFactory = metadata
+//                .getSessionFactoryBuilder()
+//                .build();
+
+        Configuration configuration = new Configuration()
+                .configure()
+                .addAnnotatedClass(Customer.class);
+        sessionFactory = configuration.buildSessionFactory();
+    }
+
     public static SessionFactoryConfiguration getInstance(){
        return (null==factoryConfiguration)
                ? factoryConfiguration = new SessionFactoryConfiguration()
@@ -18,21 +45,7 @@ public class SessionFactoryConfiguration {
     }
 
     public Session getSession(){
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                .configure()
-                .build();
-        Metadata metadata = new MetadataSources(serviceRegistry)
-                .addAnnotatedClass(Customer.class)
-                .getMetadataBuilder()
-                .applyImplicitNamingStrategy(ImplicitNamingStrategyJpaCompliantImpl.INSTANCE)
-                .build();
-
-        SessionFactory sessionFactory = metadata
-                .getSessionFactoryBuilder()
-                .build();
-
-        Session session = sessionFactory.openSession();
-        return session;
+        return sessionFactory.openSession();
 
     }
 }
