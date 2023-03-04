@@ -1,19 +1,73 @@
 package lk.ijse.gdse.hibernate.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lk.ijse.gdse.hibernate.embedded.MobileNo;
+import lk.ijse.gdse.hibernate.embedded.NameIdentifier;
+import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+
+//1.@Entity(name = "customer")
 @Entity
+@Table(name = "customer")
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String Id;
-    private String name;
-    private int age;
+    @Column(name = "customer_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    private long id;
+    // @Column(name = "customer_name")
+    private NameIdentifier name;
+    @Column(name = "customer_address")
     private String address;
-    private double salary;
+    @Column(name = "customer_salary")
+    private Double salary;
+    @Column(name = "customer_age",columnDefinition = "SMALLINT")
+    private int age;
+
+
+    @ElementCollection
+    @CollectionTable(name = "customer_mobile_nos",joinColumns = @JoinColumn(name = "customer_id"))
+    private List<MobileNo> phoneNos = new ArrayList<>();
+
+    @Transient
+    private String dob;
+
+    @CreationTimestamp
+    private Date createDate;
+
+    @CreationTimestamp
+    private Time time;
+
+    public Customer(long id, NameIdentifier name, String address, Double salary, int age, List<MobileNo> phoneNos) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.salary = salary;
+        this.age = age;
+        this.phoneNos = phoneNos;
+    }
+
+    public Customer() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public NameIdentifier getName() {
+        return name;
+    }
+
+    public void setName(NameIdentifier name) {
+        this.name = name;
+    }
 
     public String getAddress() {
         return address;
@@ -23,28 +77,12 @@ public class Customer {
         this.address = address;
     }
 
-    public double getSalary() {
+    public Double getSalary() {
         return salary;
     }
 
-    public void setSalary(double salary) {
+    public void setSalary(Double salary) {
         this.salary = salary;
-    }
-
-    public String getId() {
-        return Id;
-    }
-
-    public void setId(String id) {
-        Id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getAge() {
@@ -53,5 +91,13 @@ public class Customer {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public List<MobileNo> getPhoneNos() {
+        return phoneNos;
+    }
+
+    public void setPhoneNos(List<MobileNo> phoneNos) {
+        this.phoneNos = phoneNos;
     }
 }

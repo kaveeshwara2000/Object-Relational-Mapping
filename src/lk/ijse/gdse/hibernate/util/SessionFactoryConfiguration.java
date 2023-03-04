@@ -32,10 +32,10 @@ public class SessionFactoryConfiguration {
 //                .getSessionFactoryBuilder()
 //                .build();
 
-        Configuration configuration = new Configuration()
+        sessionFactory =  new Configuration()
                 .configure()
-                .addAnnotatedClass(Customer.class);
-        sessionFactory = configuration.buildSessionFactory();
+                .addAnnotatedClass(Customer.class)
+                .buildSessionFactory();
     }
 
     public static SessionFactoryConfiguration getInstance(){
